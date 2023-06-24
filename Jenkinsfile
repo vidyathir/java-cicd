@@ -1,3 +1,5 @@
+def gv
+
 pipeline {
     agent {
        node {
@@ -5,19 +7,30 @@ pipeline {
       }
     }
     stages {
-        stage('Build') {
+        stage("init") {
             steps {
-                echo '<--------------- Building --------------->'
-                sh 'printenv'
-                echo '<------------- Build completed --------------->'
+                script {
+                    gv = load "script.groovy"
+                }
             }
         }
-        stage('Unit Test') {
+        stage("build jar") {
             steps {
-                echo '<--------------- Unit Testing started  --------------->'
-                echo '<------------- Unit Testing stopped  --------------->'
+                script {
+                    echo "building jar"
+                    gv.buildJar()
+                }
             }
         }
-    }
+        stage("build image") {
+            steps {
+                script {
+                    echo "building image"
+                    gv.buildImage()
+                }
+            }
+        } 
+    }        
 }
+    
 
