@@ -22,6 +22,18 @@ pipeline {
                 echo '<------------- Unit Testing stopped  --------------->'
             }
         }
+         stage ("Sonar Analysis") {
+            environment {
+               scannerHome = tool 'SonarQubeScanner'
+            }
+            steps {
+                echo '<--------------- Sonar Analysis started  --------------->'
+                withSonarQubeEnv('SonarServer') {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }    
+                echo '<--------------- Sonar Analysis stopped  --------------->'
+            }   
+        }    
         stage("build image") {
             steps {
                 script {
